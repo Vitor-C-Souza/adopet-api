@@ -19,7 +19,7 @@ Adopet é um site fictício de adoção de pets, com funcionalidades para cadast
 
 As seguintes tecnologias foram utilizadas no desenvolvimento da API Rest do projeto:
 
-- **[Java 17](https://www.oracle.com/java)**
+- **[Java 22](https://www.oracle.com/java)**
 - **[Spring Boot 3](https://spring.io/projects/spring-boot)**
 - **[Maven](https://maven.apache.org)**
 - **[MySQL](https://www.mysql.com)**
