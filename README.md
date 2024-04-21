@@ -31,7 +31,3 @@ As seguintes tecnologias foram utilizadas no desenvolvimento da API Rest do proj
 - **[MySQL](https://www.mysql.com)**
 - **[Hibernate](https://hibernate.org)**
 - **[Flyway](https://flywaydb.org)**
-
-Instrutor: [Rodrigo Ferreira](https://cursos.alura.com.br/user/rodrigo-ferreira)
-
----
