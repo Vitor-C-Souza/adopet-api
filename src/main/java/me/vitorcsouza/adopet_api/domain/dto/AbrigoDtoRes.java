@@ -2,13 +2,13 @@ package me.vitorcsouza.adopet_api.domain.dto;
 
 import me.vitorcsouza.adopet_api.domain.model.Abrigo;
 
-public record abrigoDtoRes(
+public record AbrigoDtoRes(
         Long id,
         String nome,
         String email,
         String telefone
 ) {
-    public abrigoDtoRes(Abrigo abrigo) {
+    public AbrigoDtoRes(Abrigo abrigo) {
         this(
                 abrigo.getId(),
                 abrigo.getNome(),

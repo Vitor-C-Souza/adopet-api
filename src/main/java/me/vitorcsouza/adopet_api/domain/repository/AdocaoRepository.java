@@ -1,9 +1,9 @@
 package me.vitorcsouza.adopet_api.domain.repository;
 
-import me.vitorcsouza.adopet_api.domain.model.Tutor;
+import me.vitorcsouza.adopet_api.domain.model.Adocao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface tutorRepository extends JpaRepository<Tutor, Long> {
+public interface AdocaoRepository extends JpaRepository<Adocao, Long> {
 }

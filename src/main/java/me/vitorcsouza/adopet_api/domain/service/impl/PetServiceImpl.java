@@ -1,13 +1,13 @@
 package me.vitorcsouza.adopet_api.domain.service.impl;
 
 import jakarta.transaction.Transactional;
-import me.vitorcsouza.adopet_api.domain.dto.petDtoReq;
-import me.vitorcsouza.adopet_api.domain.dto.petDtoRes;
+import me.vitorcsouza.adopet_api.domain.dto.PetDtoReq;
+import me.vitorcsouza.adopet_api.domain.dto.PetDtoRes;
 import me.vitorcsouza.adopet_api.domain.model.Pet;
-import me.vitorcsouza.adopet_api.domain.repository.abrigoRepository;
-import me.vitorcsouza.adopet_api.domain.repository.petRepository;
-import me.vitorcsouza.adopet_api.domain.service.conversor.convertPet;
-import me.vitorcsouza.adopet_api.domain.service.petService;
+import me.vitorcsouza.adopet_api.domain.repository.AbrigoRepository;
+import me.vitorcsouza.adopet_api.domain.repository.PetRepository;
+import me.vitorcsouza.adopet_api.domain.service.conversor.ConvertPet;
+import me.vitorcsouza.adopet_api.domain.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +17,16 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class petServiceImpl implements petService {
+public class PetServiceImpl implements PetService {
     @Autowired
-    private petRepository repository;
+    private PetRepository repository;
     @Autowired
-    private convertPet convert;
+    private ConvertPet convert;
     @Autowired
-    private abrigoRepository repositoryAbrigo;
+    private AbrigoRepository repositoryAbrigo;
 
     @Override
-    public petDtoRes create(petDtoReq dto) {
+    public PetDtoRes create(PetDtoReq dto) {
         Pet pet = convert.toModel(dto, repositoryAbrigo);
         repository.save(pet);
         return convert.toDto(pet);
@@ -34,8 +34,8 @@ public class petServiceImpl implements petService {
 
     @Override
     @Transactional
-    public petDtoRes findById(Long id) {
-        Optional<Pet> optionalPet = repository.findById(id);
+    public PetDtoRes findById(Long id) {
+        Optional<Pet> optionalPet = repository.findByIdAvailable(id);
         if (optionalPet.isPresent()) {
             return convert.toDto(optionalPet.get());
         }
@@ -45,14 +45,14 @@ public class petServiceImpl implements petService {
 
     @Override
     @Transactional
-    public Page<petDtoRes> findAll(Pageable pag) {
-        Page<Pet> petPage = repository.findAll(pag);
-        return petPage.map(petDtoRes::new);
+    public Page<PetDtoRes> findAll(Pageable pag) {
+        Page<Pet> petPage = repository.findAllAvailable(pag);
+        return petPage.map(PetDtoRes::new);
     }
 
     @Override
     @Transactional
-    public petDtoRes update(petDtoReq dto, Long id) {
+    public PetDtoRes update(PetDtoReq dto, Long id) {
         Pet referenceById = repository.getReferenceById(id);
         referenceById.createOrUpdate(dto, repositoryAbrigo);
         repository.save(referenceById);

@@ -1,9 +1,9 @@
 package me.vitorcsouza.adopet_api.controller;
 
 import jakarta.validation.Valid;
-import me.vitorcsouza.adopet_api.domain.dto.abrigoDtoReq;
-import me.vitorcsouza.adopet_api.domain.dto.abrigoDtoRes;
-import me.vitorcsouza.adopet_api.domain.service.abrigoService;
+import me.vitorcsouza.adopet_api.domain.dto.AbrigoDtoReq;
+import me.vitorcsouza.adopet_api.domain.dto.AbrigoDtoRes;
+import me.vitorcsouza.adopet_api.domain.service.AbrigoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,32 +16,32 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/abrigo")
-public class abrigoController {
+public class AbrigoController {
     @Autowired
-    private abrigoService service;
+    private AbrigoService service;
 
     @PostMapping
-    public ResponseEntity<abrigoDtoRes> create(@RequestBody @Valid abrigoDtoReq dto, UriComponentsBuilder uri){
-        abrigoDtoRes dtoRes = service.create(dto);
+    public ResponseEntity<AbrigoDtoRes> create(@RequestBody @Valid AbrigoDtoReq dto, UriComponentsBuilder uri){
+        AbrigoDtoRes dtoRes = service.create(dto);
         URI address = uri.path("/abrigo/{id}").buildAndExpand(dtoRes.id()).toUri();
         return ResponseEntity.created(address).body(dtoRes);
     }
 
     @GetMapping
-    public ResponseEntity<Page<abrigoDtoRes>> findAll(@PageableDefault Pageable pag){
-        Page<abrigoDtoRes> dtoResPage = service.FindAll(pag);
+    public ResponseEntity<Page<AbrigoDtoRes>> findAll(@PageableDefault Pageable pag){
+        Page<AbrigoDtoRes> dtoResPage = service.findAll(pag);
         return ResponseEntity.ok(dtoResPage);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<abrigoDtoRes> findById(@PathVariable Long id){
-        abrigoDtoRes dtoRes = service.findById(id);
+    public ResponseEntity<AbrigoDtoRes> findById(@PathVariable Long id){
+        AbrigoDtoRes dtoRes = service.findById(id);
         return ResponseEntity.ok(dtoRes);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<abrigoDtoRes> update(@PathVariable Long id, @RequestBody @Valid abrigoDtoReq dto) {
-        abrigoDtoRes updated = service.update(dto, id);
+    public ResponseEntity<AbrigoDtoRes> update(@PathVariable Long id, @RequestBody @Valid AbrigoDtoReq dto) {
+        AbrigoDtoRes updated = service.update(dto, id);
         return ResponseEntity.ok(updated);
     }
 

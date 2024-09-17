@@ -2,7 +2,7 @@ package me.vitorcsouza.adopet_api.domain.dto;
 
 import me.vitorcsouza.adopet_api.domain.model.Tutor;
 
-public record tutorDtoRes(
+public record TutorDtoRes(
         Long id,
         String fotoDePerfil,
         String nome,
@@ -10,7 +10,7 @@ public record tutorDtoRes(
         String cidade,
         String sobre
 ){
-    public tutorDtoRes(Tutor tutor) {
+    public TutorDtoRes(Tutor tutor) {
         this(
                 tutor.getId(),
                 tutor.getFotoDePerfil(),

@@ -3,7 +3,7 @@ package me.vitorcsouza.adopet_api.domain.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record petDtoReq(
+public record PetDtoReq(
         @NotNull @NotBlank String nome,
         @NotNull @NotBlank String descricao,
         @NotNull @NotBlank String idade,

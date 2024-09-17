@@ -2,7 +2,7 @@ package me.vitorcsouza.adopet_api.domain.dto;
 
 import me.vitorcsouza.adopet_api.domain.model.Pet;
 
-public record petDtoRes(
+public record PetDtoRes(
         Long id,
         String nome,
         String descricao,
@@ -10,9 +10,9 @@ public record petDtoRes(
         String idade,
         String endereco,
         String imagem,
-        abrigoDtoRes abrigo
+        AbrigoDtoRes abrigo
 ) {
-    public petDtoRes(Pet pet){
+    public PetDtoRes(Pet pet){
         this(
                 pet.getId(),
                 pet.getNome(),
@@ -21,7 +21,7 @@ public record petDtoRes(
                 pet.getIdade(),
                 pet.getEndereco(),
                 pet.getImagem(),
-                new abrigoDtoRes(pet.getAbrigo())
+                new AbrigoDtoRes(pet.getAbrigo())
         );
     }
 }
