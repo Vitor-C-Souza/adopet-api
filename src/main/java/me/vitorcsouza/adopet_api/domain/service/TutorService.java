@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface TutorService {
     TutorDtoRes create(TutorDtoReq dto);
     TutorDtoRes findById(Long id);
-    Page<TutorDtoRes> FindAll(Pageable pag);
+    Page<TutorDtoRes> findAll(Pageable pag);
     TutorDtoRes update(TutorDtoReq dto, Long id);
     void delete(Long id);
 }

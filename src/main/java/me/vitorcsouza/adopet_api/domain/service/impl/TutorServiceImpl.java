@@ -41,12 +41,12 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public Page<TutorDtoRes> FindAll(Pageable pag) {
-        Page<Tutor> tutors = repository.findAll(pag);
-        if(tutors.isEmpty()){
+    public Page<TutorDtoRes> findAll(Pageable pag) {
+        Page<Tutor> tutores = repository.findAll(pag);
+        if(tutores.isEmpty()){
             throw new NoSuchElementException();
         }
-        return tutors.map(TutorDtoRes::new);
+        return tutores.map(TutorDtoRes::new);
     }
 
     @Override

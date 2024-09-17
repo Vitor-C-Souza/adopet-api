@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/tutores")
+@RequestMapping("/tutor")
 public class TutorController {
     @Autowired
     private TutorService service;
@@ -39,7 +39,7 @@ public class TutorController {
 
     @GetMapping
     public ResponseEntity<Page<TutorDtoRes>> findAll(@PageableDefault Pageable pag){
-        Page<TutorDtoRes> dtoResPage = service.FindAll(pag);
+        Page<TutorDtoRes> dtoResPage = service.findAll(pag);
         return ResponseEntity.ok(dtoResPage);
     }
 
