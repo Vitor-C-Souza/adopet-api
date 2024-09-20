@@ -37,7 +37,7 @@ public class Adocao {
 
     public void createOrUpdate(AdocaoDtoReq dto, PetRepository petRepository, TutorRepository tutorRepository) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.animal = petRepository.findById(dto.animal()).orElseThrow(NoSuchElementException::new);
+        this.animal = petRepository.findByIdAvailable(dto.animal()).orElseThrow(NoSuchElementException::new);
         this.tutor = tutorRepository.findById(dto.tutor()).orElseThrow(NoSuchElementException::new);
         this.data = LocalDate.parse(dto.data(), formatter);
     }
