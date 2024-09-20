@@ -105,7 +105,17 @@ class PetServiceTest {
         assertEquals(petDtoRes.nome(), captorValue.getNome());
         assertEquals(petDtoRes.descricao(), captorValue.getDescricao());
         assertEquals(petDtoRes.adotado(), captorValue.isAdotado());
+        assertEquals(petDtoRes.idade(), captorValue.getIdade());assertEquals(petDtoRes.id(), captorValue.getId());
+        assertEquals(petDtoRes.nome(), captorValue.getNome());
+        assertEquals(petDtoRes.descricao(), captorValue.getDescricao());
+        assertEquals(petDtoRes.adotado(), captorValue.isAdotado());
         assertEquals(petDtoRes.idade(), captorValue.getIdade());
+        assertEquals(petDtoRes.endereco(), captorValue.getEndereco());
+        assertEquals(petDtoRes.imagem(), captorValue.getImagem());
+        assertEquals(petDtoRes.abrigo().id(), captorValue.getAbrigo().getId());
+        assertEquals(petDtoRes.abrigo().nome(), captorValue.getAbrigo().getNome());
+        assertEquals(petDtoRes.abrigo().email(), captorValue.getAbrigo().getEmail());
+        assertEquals(petDtoRes.abrigo().telefone(), captorValue.getAbrigo().getTelefone());
         assertEquals(petDtoRes.endereco(), captorValue.getEndereco());
         assertEquals(petDtoRes.imagem(), captorValue.getImagem());
         assertEquals(petDtoRes.abrigo().id(), captorValue.getAbrigo().getId());
