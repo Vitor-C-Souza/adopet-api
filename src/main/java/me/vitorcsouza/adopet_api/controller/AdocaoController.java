@@ -5,6 +5,9 @@ import me.vitorcsouza.adopet_api.domain.dto.AdocaoDtoReq;
 import me.vitorcsouza.adopet_api.domain.dto.AdocaoDtoRes;
 import me.vitorcsouza.adopet_api.domain.service.AdocaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,5 +32,11 @@ public class AdocaoController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<AdocaoDtoRes>> findAll(@PageableDefault(size = 10) Pageable paginacao){
+        Page<AdocaoDtoRes> dtoRes = service.findAll(paginacao);
+        return ResponseEntity.ok(dtoRes);
     }
 }

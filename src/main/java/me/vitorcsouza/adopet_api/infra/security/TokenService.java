@@ -21,9 +21,9 @@ public class TokenService {
         try {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API aluraflix")
+                    .withIssuer("API adopet")
                     .withSubject(usuario.getUsuario())
-//                    .withSubject(String.valueOf(usuario.getTipo()))
+                    .withClaim("perfil", String.valueOf(usuario.getTipo()))
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){
@@ -39,11 +39,26 @@ public class TokenService {
         try {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("API aluraflix")
+                    .withIssuer("API adopet")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception){
+            throw new RuntimeException("Token JWT inválido ou expirado!");
+        }
+    }
+
+    public String getPerfilFromToken(String tokenJWT) {
+        try {
+            Algorithm algoritmo = Algorithm.HMAC256(secret);
+            var verifier = JWT.require(algoritmo)
+                    .withIssuer("API adopet")
+                    .build();
+
+            var decodedJWT = verifier.verify(tokenJWT);
+            String perfil = decodedJWT.getClaim("perfil").asString();
+            return perfil;
+        } catch (JWTVerificationException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!");
         }
     }

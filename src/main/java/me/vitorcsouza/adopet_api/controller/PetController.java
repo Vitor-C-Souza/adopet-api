@@ -29,7 +29,7 @@ public class PetController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PetDtoRes>> findAll(@PageableDefault Pageable pag) {
+    public ResponseEntity<Page<PetDtoRes>> findAll(@PageableDefault(size = 10) Pageable pag) {
         Page<PetDtoRes> dtoResPage = service.findAll(pag);
         return ResponseEntity.ok(dtoResPage);
     }

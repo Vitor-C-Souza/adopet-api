@@ -2,6 +2,7 @@ package me.vitorcsouza.adopet_api.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.vitorcsouza.adopet_api.domain.dto.CadastroDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity(name = "perfil_tb")
 @Getter
+@NoArgsConstructor
 public class Login implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

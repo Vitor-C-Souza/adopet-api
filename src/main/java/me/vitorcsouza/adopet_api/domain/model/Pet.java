@@ -3,6 +3,7 @@ package me.vitorcsouza.adopet_api.domain.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import me.vitorcsouza.adopet_api.domain.dto.PetDtoReq;
 import me.vitorcsouza.adopet_api.domain.repository.AbrigoRepository;
 
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 @Table(name = "pet_tb")
 @Getter
 @NoArgsConstructor
+@ToString
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +55,6 @@ public class Pet {
     }
 
     public void adotar(){
-        this.adotado = true;
+        this.adotado = !this.adotado;
     }
 }

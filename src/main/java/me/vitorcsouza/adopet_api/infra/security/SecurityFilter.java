@@ -28,13 +28,21 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
-            var usuario = respository.findByUsuario(subject);
-
-            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            var perfil = tokenService.getPerfilFromToken(tokenJWT);
+            if (perfil.equals("ABRIGO") || !isDeleteRequest(request)) {
+                var usuario = respository.findByUsuario(subject);
+                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isDeleteRequest(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        return method.equalsIgnoreCase("DELETE") && uri.matches("/adocao/\\d+");
     }
 
     private String recuperarToken(HttpServletRequest request) {
