@@ -84,7 +84,6 @@ classDiagram
     Abrigo "1" --> "0..*" Pet
     Pet "1" --> "0..*" Adocao
     Tutor "1" --> "0..*" Adocao
-    Adocao --> PclassDiagram
     class Abrigo {
         Long id
         String email
@@ -153,12 +152,12 @@ classDiagram
         +void createOrUpdate(TutorDtoReq dto)
     }
 
-    Abrigo "1" --> "0..*" Pet : "tem"
-    Pet "1" --> "0..*" Adocao : "adocao"
-    Tutor "1" --> "0..*" Adocao : "realiza"
-    Adocao --> Pet : "adota"
-    Adocao --> Tutor : "adotado por"
-    Login --> Tipo : "tem"
+    Abrigo "1" --> "0..*" Pet
+    Pet "1" --> "0..*" Adocao
+    Tutor "1" --> "0..*" Adocao
+    Adocao --> Pet
+    Adocao --> Tutor 
+    Login --> Tipo
 et
     Adocao --> Tutor
     Login --> Tipo
