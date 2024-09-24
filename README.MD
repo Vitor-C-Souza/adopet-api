@@ -84,7 +84,82 @@ classDiagram
     Abrigo "1" --> "0..*" Pet
     Pet "1" --> "0..*" Adocao
     Tutor "1" --> "0..*" Adocao
-    Adocao --> Pet
+    Adocao --> PclassDiagram
+    class Abrigo {
+        Long id
+        String email
+        String telefone
+        String nome
+        List~Pet~ pets
+        +Abrigo(AbrigoDtoReq dto)
+        +void createOrUpdate(AbrigoDtoReq dto)
+    }
+    
+    class Adocao {
+        Long id
+        Pet animal
+        Tutor tutor
+        LocalDate data
+        +Adocao(AdocaoDtoReq dto, PetRepository petRepository, TutorRepository tutorRepository)
+        +void createOrUpdate(AdocaoDtoReq dto, PetRepository petRepository, TutorRepository tutorRepository)
+    }
+    
+    class Login {
+        Long id
+        String usuario
+        String email
+        String senha
+        Tipo tipo
+        +Login(CadastroDto dto, String senha, String tipo)
+        +Collection~GrantedAuthority~ getAuthorities()
+        +String getPassword()
+        +String getUsername()
+        +boolean isAccountNonExpired()
+        +boolean isAccountNonLocked()
+        +boolean isCredentialsNonExpired()
+        +boolean isEnabled()
+    }
+    
+    class Pet {
+        Long id
+        String nome
+        String descricao
+        boolean adotado
+        String idade
+        String endereco
+        String imagem
+        Abrigo abrigo
+        List~Adocao~ adocoes
+        +Pet(PetDtoReq dto, AbrigoRepository repository)
+        +void createOrUpdate(PetDtoReq dto, AbrigoRepository repository)
+        +void adotar()
+    }
+    
+    class Tipo {
+        <<enumeration>>
+        TUTOR
+        ABRIGO
+    }
+    
+    class Tutor {
+        Long id
+        String fotoDePerfil
+        String nome
+        String telefone
+        String cidade
+        String sobre
+        List~Adocao~ adocoes
+        +Tutor(TutorDtoReq dto)
+        +void createOrUpdate(TutorDtoReq dto)
+    }
+
+    Abrigo "1" --> "0..*" Pet : "tem"
+    Pet "1" --> "0..*" Adocao : "adocao"
+    Tutor "1" --> "0..*" Adocao : "realiza"
+    Adocao --> Pet : "adota"
+    Adocao --> Tutor : "adotado por"
+    Login --> Tipo : "tem"
+et
     Adocao --> Tutor
     Login --> Tipo
 
