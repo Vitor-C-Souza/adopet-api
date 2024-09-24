@@ -2,9 +2,11 @@ package me.vitorcsouza.adopet_api.controller;
 
 import me.vitorcsouza.adopet_api.domain.dto.*;
 import me.vitorcsouza.adopet_api.domain.model.Abrigo;
+import me.vitorcsouza.adopet_api.domain.model.Login;
 import me.vitorcsouza.adopet_api.domain.model.Pet;
 import me.vitorcsouza.adopet_api.domain.repository.AbrigoRepository;
 import me.vitorcsouza.adopet_api.domain.service.PetService;
+import me.vitorcsouza.adopet_api.infra.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,6 +38,8 @@ class PetControllerTest {
 
     @MockBean
     private PetService service;
+    @MockBean
+    private TokenService tokenService;
 
     @MockBean
     private AbrigoRepository abrigoRepository;
@@ -46,12 +49,21 @@ class PetControllerTest {
 
     private Long id;
     String json;
+    private String token;
 
     private PageRequest paginacao;
     private Page<Pet> petPage;
 
     @BeforeEach
     void setUp(){
+        id = 1L;
+        CadastroDto cadastroDto = new CadastroDto(id, "vitor", "vitor@example.com", "1234");
+        Login login = new Login(cadastroDto, "1234", "ABRIGO");
+        token = tokenService.GerarToken(login);
+        when(tokenService.GerarToken(login)).thenReturn(token);
+
+        when(tokenService.getPerfilFromToken(any(String.class))).thenReturn("ABRIGO");
+        when(tokenService.getSubject(anyString())).thenReturn(login.getUsuario());
         Abrigo abrigo = new Abrigo(new AbrigoDtoReq(
                 "Refúgio dos Anjos",
                 "refugio@anjos.com.br",
@@ -82,7 +94,7 @@ class PetControllerTest {
         Pet pet1 = new Pet(dtoReq, abrigoRepository);
         Pet pet2 = new Pet(dtoReq, abrigoRepository);
 
-        id = 1L;
+
         dtoRes = new PetDtoRes(pet1);
 
         List<Pet> petList = Arrays.asList(pet1, pet2);
@@ -97,6 +109,7 @@ class PetControllerTest {
 
         //ACT
         var response = mockMvc.perform(post("/pet")
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
@@ -112,6 +125,7 @@ class PetControllerTest {
 
         //ACT
         var response = mockMvc.perform(get("/pet/" + id)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 
@@ -126,6 +140,7 @@ class PetControllerTest {
 
         //ACT
         var response = mockMvc.perform(get("/pet")
+                .header("Authorization", "Bearer " + token)
                 .param("page", "0")
                 .param("size", "15")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -142,6 +157,7 @@ class PetControllerTest {
 
         //ACT
         var response = mockMvc.perform(put("/pet/" + id)
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
@@ -156,6 +172,7 @@ class PetControllerTest {
 
         //ACT
         var response = mockMvc.perform(delete("/pet/" + id)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 

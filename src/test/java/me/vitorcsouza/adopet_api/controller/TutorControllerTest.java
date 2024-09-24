@@ -1,9 +1,12 @@
 package me.vitorcsouza.adopet_api.controller;
 
+import me.vitorcsouza.adopet_api.domain.dto.CadastroDto;
 import me.vitorcsouza.adopet_api.domain.dto.TutorDtoReq;
 import me.vitorcsouza.adopet_api.domain.dto.TutorDtoRes;
+import me.vitorcsouza.adopet_api.domain.model.Login;
 import me.vitorcsouza.adopet_api.domain.model.Tutor;
 import me.vitorcsouza.adopet_api.domain.service.TutorService;
+import me.vitorcsouza.adopet_api.infra.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,12 +38,15 @@ class TutorControllerTest {
 
     @MockBean
     private TutorService service;
+    @MockBean
+    private TokenService tokenService;
 
     private TutorDtoRes dtoRes;
     private TutorDtoReq dtoReq;
 
     private Long id;
     String json;
+    private String token;
 
     private PageRequest paginacao;
 
@@ -47,6 +54,14 @@ class TutorControllerTest {
 
     @BeforeEach
     void setUp() {
+        id = 1L;
+        CadastroDto cadastroDto = new CadastroDto(id, "vitor", "vitor@example.com", "1234");
+        Login login = new Login(cadastroDto, "1234", "ABRIGO");
+        token = tokenService.GerarToken(login);
+        when(tokenService.GerarToken(login)).thenReturn(token);
+
+        when(tokenService.getPerfilFromToken(any(String.class))).thenReturn("ABRIGO");
+        when(tokenService.getSubject(anyString())).thenReturn(login.getUsuario());
         json = """
                 {
                   "fotoDePerfil": "link_para_foto_de_perfil3.jpg",
@@ -67,7 +82,7 @@ class TutorControllerTest {
         Tutor tutor1 = new Tutor(dtoReq);
         Tutor tutor2 = new Tutor(dtoReq);
 
-        id = 1L;
+
         dtoRes = new TutorDtoRes(tutor1);
 
         List<Tutor> tutores = Arrays.asList(tutor1, tutor2);
@@ -83,6 +98,7 @@ class TutorControllerTest {
 
         //ACT
         var response = mockMvc.perform(post("/tutor")
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
@@ -98,6 +114,7 @@ class TutorControllerTest {
 
         //ACT
         var response = mockMvc.perform(get("/tutor/" + id)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 
@@ -112,6 +129,7 @@ class TutorControllerTest {
 
         //ACT
         var response = mockMvc.perform(get("/tutor")
+                .header("Authorization", "Bearer " + token)
                 .param("page", "0")
                 .param("size", "15")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -128,6 +146,7 @@ class TutorControllerTest {
 
         //ACT
         var response = mockMvc.perform(put("/tutor/" + id)
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
@@ -142,6 +161,7 @@ class TutorControllerTest {
 
         //ACT
         var response = mockMvc.perform(delete("/tutor/" + id)
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 

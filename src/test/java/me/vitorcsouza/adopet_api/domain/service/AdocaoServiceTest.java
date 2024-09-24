@@ -52,7 +52,7 @@ class AdocaoServiceTest {
     private PetDtoReq petDtoReq;
     private Pet pet;
     private Abrigo abrigo;
-    Long id;
+
 
     @Captor
     private ArgumentCaptor<Adocao> adocaoArgumentCaptor;
@@ -60,7 +60,7 @@ class AdocaoServiceTest {
     @BeforeEach
     void setUp(){
         dtoReq = new AdocaoDtoReq(
-                3L,
+                4L,
                 2L,
                 "14/12/1997"
         );
@@ -70,7 +70,7 @@ class AdocaoServiceTest {
                 "5 anos",
                 "Rua dos Gatos, 202, Vila Felina",
                 "http://example.com/imagens/mimi.jpg",
-                1L,
+                4L,
                 false
         );
         AbrigoDtoReq abrigoDtoReq = new AbrigoDtoReq(
@@ -99,12 +99,14 @@ class AdocaoServiceTest {
 
         lenient().when(convert.toDto(adocao)).thenReturn(dtoRes);
         lenient().when(convert.toModel(dtoReq, petRepository, tutorRepository)).thenReturn(adocao);
+
+        given(petRepository.findById(adocao.getAnimal().getId())).willReturn(Optional.ofNullable(pet));
     }
 
     @Test
     void deveCriarUmaAdocao(){
         //ARRANGE
-        given(petRepository.getReferenceById(adocao.getAnimal().getId())).willReturn(pet);
+
         //ACT
         AdocaoDtoRes adocaoDtoRes = service.create(dtoReq);
 
@@ -118,7 +120,8 @@ class AdocaoServiceTest {
     @Test
     void deveApagarUmaAdocao(){
         //ARRANGE
-
+        Long id = 1L;
+        given(repository.findById(id)).willReturn(Optional.ofNullable(adocao));
         //ACT
         service.delete(id);
 

@@ -1,14 +1,12 @@
 package me.vitorcsouza.adopet_api.controller;
 
 import me.vitorcsouza.adopet_api.domain.dto.*;
-import me.vitorcsouza.adopet_api.domain.model.Abrigo;
-import me.vitorcsouza.adopet_api.domain.model.Adocao;
-import me.vitorcsouza.adopet_api.domain.model.Pet;
-import me.vitorcsouza.adopet_api.domain.model.Tutor;
+import me.vitorcsouza.adopet_api.domain.model.*;
 import me.vitorcsouza.adopet_api.domain.repository.AbrigoRepository;
 import me.vitorcsouza.adopet_api.domain.repository.PetRepository;
 import me.vitorcsouza.adopet_api.domain.repository.TutorRepository;
 import me.vitorcsouza.adopet_api.domain.service.AdocaoService;
+import me.vitorcsouza.adopet_api.infra.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,11 +40,23 @@ class AdocaoControllerTest {
 
     private AdocaoDtoRes dtoRes;
 
+    @MockBean
+    private TokenService tokenService;
+
     String json;
+    private String token;
 
 
     @BeforeEach
     void setUp(){
+        Long id = 1L;
+        CadastroDto cadastroDto = new CadastroDto(id, "vitor", "vitor@example.com", "1234");
+        Login login = new Login(cadastroDto, "1234", "ABRIGO");
+        token = tokenService.GerarToken(login);
+        when(tokenService.GerarToken(login)).thenReturn(token);
+
+        when(tokenService.getPerfilFromToken(any(String.class))).thenReturn("ABRIGO");
+        when(tokenService.getSubject(anyString())).thenReturn(login.getUsuario());
 
         Abrigo abrigo = new Abrigo(new AbrigoDtoReq(
                 "Refúgio dos Anjos",
@@ -67,7 +76,7 @@ class AdocaoControllerTest {
                 false
         ), abrigoRepository);
 
-        when(petRepository.findById(anyLong())).thenReturn(Optional.of(pet));
+        when(petRepository.findByIdAvailable(anyLong())).thenReturn(Optional.of(pet));
 
         Tutor tutor = new Tutor(new TutorDtoReq(
                 "link_para_foto_de_perfil3.jpg",
@@ -105,6 +114,7 @@ class AdocaoControllerTest {
 
         //ACT
         var response = mockMvc.perform(post("/adocao")
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
@@ -119,6 +129,7 @@ class AdocaoControllerTest {
 
         //ACT
         var response = mockMvc.perform(delete("/adocao/" + anyLong())
+                .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse();
 
