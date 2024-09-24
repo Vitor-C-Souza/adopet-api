@@ -92,7 +92,7 @@ classDiagram
 
 ## Testes
 Para testar a aplicação basta acessar esta URL:
-https://jornada-milhas-api-jornada-milhas.up.railway.app/swagger-ui/index.html#/
+https://adopet-api-adopet.up.railway.app/swagger-ui/index.html#/
 
 ## Contribuição
 
