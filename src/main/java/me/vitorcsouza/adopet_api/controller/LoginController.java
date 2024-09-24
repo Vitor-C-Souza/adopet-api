@@ -1,5 +1,6 @@
 package me.vitorcsouza.adopet_api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import me.vitorcsouza.adopet_api.domain.dto.CadastroDto;
 import me.vitorcsouza.adopet_api.domain.dto.LoginDto;
@@ -30,6 +31,7 @@ public class LoginController {
     private TokenService tokenService;
 
     @PostMapping("abrigo/cadastro")
+    @Operation(summary = "Cadastra um perfil do tipo abrigo", tags = {"Cadastro"})
     public ResponseEntity<CadastroDto> cadastrarAbrigo(@RequestBody @Valid CadastroDto dto, UriComponentsBuilder uri) {
         String senhaEncriptada = BCrypt.hashpw(dto.senha(), BCrypt.gensalt());
         CadastroDto cadastro = service.cadastroAbrigo(dto, senhaEncriptada);
@@ -40,6 +42,7 @@ public class LoginController {
     }
 
     @PostMapping("tutor/cadastro")
+    @Operation(summary = "Cadastra um perfil do tipo tutor", tags = {"Cadastro"})
     public ResponseEntity<CadastroDto> cadastrarTutor(@RequestBody @Valid CadastroDto dto, UriComponentsBuilder uri) {
         String senhaEncriptada = BCrypt.hashpw(dto.senha(), BCrypt.gensalt());
         CadastroDto cadastro = service.cadastroTutor(dto, senhaEncriptada);
@@ -50,6 +53,7 @@ public class LoginController {
     }
 
     @PostMapping("/logar")
+    @Operation(summary = "Efetua o login no sistema", tags = {"Login"})
     public ResponseEntity<TokenJWT> logar(@RequestBody @Valid LoginDto dto){
 
         var autheticationToken = new UsernamePasswordAuthenticationToken(dto.usuario(), dto.senha());
