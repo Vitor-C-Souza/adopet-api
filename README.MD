@@ -2,7 +2,7 @@
 API para o site adopet.
 
 ## Descrição
-Api para o site adopet onde pode registrar animais e em qual abrigo esta cadastrar abrigos/ONGs se registrar com tutor para encontrar um pet novo ou não e adotar.
+Api para o site adopet onde pode registrar animais e em qual abrigo esta, cadastrar abrigos/ONGs, se registrar com tutor para encontrar um pet novo e adotar.
 
 ## Tecnologias
 - Java 17
